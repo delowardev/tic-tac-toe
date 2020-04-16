@@ -1,0 +1,116 @@
+@import 'normalize';
+
+:root {
+	--background: #4a17a5;
+}
+
+body{
+	// font-family: 'Hind Siliguri', sans-serif;
+    font-family: 'Fondamento', cursive;
+	min-height: 100vh;
+	background-color: var(--background);
+	background-image: radial-gradient(rgba(#ffffff, .2), transparent);
+	color: #ffffff;
+	font-size: 15px;
+}
+/**
+ * Welcome Component
+ */
+
+.welcome{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+
+}
+
+.welcome-inner h1{
+	font-size: 38px;
+	text-align: center;
+}
+
+/**
+ * Players Component
+ */
+
+ .online-players-card{
+	 width: 400px;
+	 background: #4a17a5;
+	 margin: 0 auto 50px;
+	 border-radius: 5px;
+	 overflow: hidden;
+	 .player-card-header{
+		 display: flex;
+		 align-items: center;
+		 justify-content: space-between;
+		 padding: 15px 25px;
+		 background: rgba(#000, .1);
+		 h3{
+			 margin: 0;
+			 position: relative;
+			 padding-left: 20px;
+			 &::before{
+				 content: '';
+				 position: absolute;
+				 height: 10px;
+				 width: 10px;
+				 background: greenyellow;
+				 border-radius: 50%;
+				 top: 50%;
+				 left: 0;
+				 transform: translateY(-50%);
+			 }
+		 }
+	 }
+	 .player-card-body{
+		 overflow: auto;
+	 	height: 410px;
+	 }
+ }
+
+/**
+ * Player Component
+ */
+
+ .player-list{
+	 padding: 20px 30px;
+	 display: flex;
+	 border-bottom: 1px solid rgba(#000, .2);
+	 .player-thumbnail{
+		 flex-basis: 80px;
+		 max-width: 80px;
+		 span{
+			 display: block;
+			 width: 60px;
+			 height: 60px;
+			 background: orange;
+			 background: #ff3c77;
+			 line-height: 60px;
+			 text-align: center;
+			 border-radius: 50%;
+			 text-transform: uppercase;
+		 }
+	 }
+	 .player-info{
+		 flex-grow: 1;
+		 display: flex;
+		 justify-content: space-between;
+		 align-items: center;
+		 h4{
+			 margin: 0;
+			 font-size: 19px;
+		 }
+		 span{
+			 font-size: 14px;
+		 }
+		 .button{
+			 border: none;
+			 background: #ffd652;
+			 color: #000;
+			 font-size: 16px;
+			 padding: 4px 16px;
+			 border-radius: 4px;
+		 }
+	 }
+ }

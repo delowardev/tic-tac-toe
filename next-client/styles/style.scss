@@ -78,8 +78,8 @@ body{
 	 display: flex;
 	 border-bottom: 1px solid rgba(#000, .2);
 	 .player-thumbnail{
-		 flex-basis: 80px;
-		 max-width: 80px;
+		 flex-basis: 60px;
+		 max-width: 60px;
 		 span{
 			 display: block;
 			 width: 60px;
@@ -93,24 +93,30 @@ body{
 		 }
 	 }
 	 .player-info{
+		 padding-left: 20px;
 		 flex-grow: 1;
 		 display: flex;
 		 justify-content: space-between;
 		 align-items: center;
 		 h4{
-			 margin: 0;
-			 font-size: 19px;
+			 margin: 0 0 4px;
+			 font-size: 17px;
 		 }
 		 span{
-			 font-size: 14px;
+			 font-size: 13px;
+			 opacity: .6;
 		 }
 		 .button{
 			 border: none;
 			 background: #ffd652;
 			 color: #000;
-			 font-size: 16px;
+			 font-size: 15px;
 			 padding: 4px 16px;
 			 border-radius: 4px;
+			 transition: 300ms;
+			 &:hover{
+				 background: palegreen;
+			 }
 		 }
 	 }
  }

@@ -10,7 +10,7 @@ class MyDocument extends Document {
         return (
             <Html>
                 <Head />
-                <body>
+                <body style={{'--body-bg': `url(/static/background.jpg)`}}>
                     <Main />
                     <NextScript />
                 </body>

@@ -1,40 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Player from './Player';
+import io from 'socket.io-client';
+import faker from 'faker';
+
+let socket;
 
 export default function Players() {
-    const DEFAULT_PLAYER = [
-        {
-            id: 'STATIC_99',
-            name: 'Toc Bot',
-            joined_at: ''
-        },
-        {
-            id: 'STATIC_98',
-            name: 'Tic Bot',
-            joined_at: ''
-        },
-        {
-            id: 'STATIC_97',
-            name: 'Tic Bot',
-            joined_at: ''
-        },
-        {
-            id: 'STATIC_96',
-            name: 'Tic Bot',
-            joined_at: ''
-        },
-        {
-            id: 'STATIC_95',
-            name: 'Tic Bot',
-            joined_at: ''
-        },
-        {
-            id: 'STATIC_94',
-            name: 'Tic Bot',
-            joined_at: ''
+
+    const [players, setPlayers] = useState([]);
+
+    const ENDPOINT = 'localhost:5000';
+    socket = io(ENDPOINT);
+
+    useEffect(() => {
+        const name = faker.name.firstName() + ' ' + faker.name.lastName();
+        socket.emit('join', {name, room: 'global'});
+
+        return () => {
+            socket.emit('disconnect');
+            socket.off();
         }
-    ]
-    const [players, setPlayers] = useState([...DEFAULT_PLAYER])
+
+    }, [])
+
+    useEffect(() => {
+        
+        socket.on('user_joined', (users) => {
+            setPlayers(users);
+        });
+
+        socket.on('user_left', (users) => {
+            setPlayers(users);
+        }); 
+
+    }, [players]);
+
 
     return (
         <div className='online-players-card'>

@@ -1,12 +1,17 @@
+import { useEffect, useState } from "react";
 
-function randomColors() {
+function randomColor() {
     const COLOR = ['#f44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#FFC107', '#FF9800', '#FF5722'];
     const rand = Math.round(Math.random() * (COLOR.length - 0)) + 0;
     return COLOR[rand];
 }
 
 export default function Player({player}) {
-    const color = randomColors();
+    const [color, setColor] = useState('#9C27B0');
+    useEffect(() => {
+        setColor(randomColor())
+    }, [])
+
     return (
         <div className='player-list'>
             <div className="player-thumbnail">

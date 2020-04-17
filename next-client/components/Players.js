@@ -11,6 +11,9 @@ export default function Players() {
 
     const getName = () => faker.name.firstName() + ' ' + faker.name.lastName();
 
+    /**
+     * Run once after mounted
+     */
     useEffect(() => {
 
         /**
@@ -43,6 +46,9 @@ export default function Players() {
 
     }, []);
 
+    /**
+     * Run on every new player added or removed
+     */
     useEffect(() => {
         socket.current.off('accept');
         socket.current.on('accept', reqUserID => {
@@ -51,6 +57,7 @@ export default function Players() {
         });
 
     }, [players]);
+
 
     const onChallenge = (user) => {
         socket.current.emit('challenge', user.id)

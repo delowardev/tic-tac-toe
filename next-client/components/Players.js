@@ -21,11 +21,13 @@ export default function Players() {
         /**
          * Watch events
          */
+        socket.current.off('user_joined');
         socket.current.on('user_joined', users => {
             users.map(user => user.isCurrentUser = user.id === socket.current.id);
             setPlayers(users);
         });
 
+        socket.current.off('user_left');
         socket.current.on('user_left', users => {
             users.map(user => user.isCurrentUser = user.id === socket.current.id);
             setPlayers(users);

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+// import TimeAgo from 'react-timeago';
+import { format } from 'timeago.js';
 
 function randomColor() {
     const COLOR = ['#f44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#FFC107', '#FF9800', '#FF5722'];
@@ -13,16 +15,16 @@ export default function Player({player}) {
     }, [])
 
     return (
-        <div className='player-list'>
+        <div className={`player-list current-user-${player.isCurrentUser}`}>
             <div className="player-thumbnail">
                 <span style={{ background: color}}>{player.name.substring(0, 2)}</span>
             </div>
             <div className="player-info">
                 <div className="player-info-left">
                     <h4>{player.name}</h4>
-                    <span>Joned: 3 minutes ago</span>
+                    <span>Joined: {format(player.joined_at)}</span>
                 </div>
-                <button className='button'>Challange</button>
+                <button disabled={player.isCurrentUser} className='button'>{player.isCurrentUser ? 'It\'s you!' : 'Challange'}</button>
             </div>
         </div>
     )

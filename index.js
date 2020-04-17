@@ -14,24 +14,27 @@ const io = socketio(server);
 
 io.on('connection', function (socket) {
     const id = socket.id;
+    let user_room = '';
 
     /**
      * User Join Function
      */
     socket.on('join', function ({ name, room }) {
-        const { user } = addUser({id, name, room}); // add user to users array
-        // socket.join(user.room);
-        socket.emit('user_joined', users); // emit event with modified users array
-        console.log(id, 'joined')
+        addUser({id, name, room}); // add user to users array
+        user_room = room;
+        socket.join(user_room);
+        socket.emit('user_joined', { users, id});
+        socket.broadcast.to(user_room).emit('user_joined', { users, id}); // emit event with modified users array
     })
 
     /**
      * User Disconnect function
      */
     socket.on('disconnect', () => {
+        socket.leave(socket);
         removeUser(id); // remove user form users array
-        socket.emit('user_left', users);  // emit event with modified users
-        console.log(id, 'left')
+        socket.emit('user_left', {users, id});
+        socket.broadcast.to(user_room).emit('user_left', {users, id});  // emit event with modified users
     })
 
 

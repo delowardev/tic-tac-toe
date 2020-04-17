@@ -16,7 +16,7 @@ const addUser = ({id, name, room}) => {
         joined_at: Date.now()
     };
 
-    users.push(user);
+    users.unshift(user);
     return { user };
 
 }

@@ -7,7 +7,7 @@ export default function Players() {
 
     const [players, setPlayers] = useState([]);
     const [challengedBy, setChallengedBy] = useState(null);
-    const socket = useRef(io('localhost:5000'));
+    const socket = useRef(io('ws://localhost:5000'));
 
     const getName = () => faker.name.firstName() + ' ' + faker.name.lastName();
 

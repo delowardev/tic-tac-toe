@@ -11,13 +11,24 @@ function randomColor() {
 export default function Player({ player, onChallenge}) {
 
     const [color, setColor] = useState('#9C27B0');
+    const [button, setButton] = useState('Challenge');
 
     useEffect(() => {
-        setColor(randomColor())
+        setColor(randomColor());
+
+        if(player.isCurrentUser) {
+            setButton('It\'s you!');
+        }
+
     }, [])
 
     const _handleClick = () => {
+        if( player.isCurrentUser ) return;
+
         onChallenge(player)
+        setButton('Waiting...');
+        setTimeout(() => setButton('Challenge'), 3000)
+        
     }
 
 
@@ -31,7 +42,7 @@ export default function Player({ player, onChallenge}) {
                     <h4>{player.name}</h4>
                     <span>Joined: {format(player.joined_at)}</span>
                 </div>
-                <button onClick={_handleClick} disabled={player.isCurrentUser} className='button'>{player.isCurrentUser ? 'It\'s you!' : 'Challenge'}</button>
+                <button onClick={_handleClick} disabled={player.isCurrentUser} className='button'>{button}</button>
             </div>
         </div>
     )

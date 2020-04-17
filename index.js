@@ -1,5 +1,4 @@
 const express = require('express');
-const socketio = require('socket.io');
 const http = require('http');
 const router = require('./router');
 const { addUser, removeUser, getUser, getUsersInRoom, users } = require('./users');
@@ -8,9 +7,12 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 const server = http.createServer(app);
+
+
+const socketio = require('socket.io');
 const io = socketio(server);
 
-
+io.origins('*:*');
 
 io.on('connection', function (socket) {
     const id = socket.id;
@@ -23,8 +25,8 @@ io.on('connection', function (socket) {
         addUser({id, name, room}); // add user to users array
         user_room = room;
         socket.join(user_room);
-        socket.emit('user_joined', { users, id});
-        socket.broadcast.to(user_room).emit('user_joined', { users, id}); // emit event with modified users array
+        socket.emit('user_joined', { users, id, type : 'current_user'});
+        socket.broadcast.to(user_room).emit('user_joined', { users, id, type: 'new_user'}); // emit event with modified users array
     })
 
     /**
@@ -33,8 +35,8 @@ io.on('connection', function (socket) {
     socket.on('disconnect', () => {
         socket.leave(socket);
         removeUser(id); // remove user form users array
-        socket.emit('user_left', {users, id});
-        socket.broadcast.to(user_room).emit('user_left', {users, id});  // emit event with modified users
+        socket.emit('user_left', {users, id, type: 'current_user'});
+        socket.broadcast.to(user_room).emit('user_left', {users, id, type: 'new_user'});  // emit event with modified users
     })
 
 

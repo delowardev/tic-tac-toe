@@ -13,7 +13,14 @@ export default function Players() {
 
     useEffect(() => {
 
+        /**
+         * Emit events
+         */
         socket.current.emit('join', {name: getName(), room: 'global'});
+
+        /**
+         * Watch events
+         */
         socket.current.on('user_joined', users => {
             users.map(user => user.isCurrentUser = user.id === socket.current.id);
             setPlayers(users);
@@ -22,8 +29,11 @@ export default function Players() {
         socket.current.on('user_left', users => {
             users.map(user => user.isCurrentUser = user.id === socket.current.id);
             setPlayers(users);
-        }); 
+        });
 
+        /**
+         * Run before unmount
+         */
         return () => {
             socket.current.emit('disconnect');
             socket.current.off();
@@ -31,10 +41,17 @@ export default function Players() {
 
     }, []);
 
-    const _onRequest = (reqFromID) => {
-        alert(reqFromID + 'challenged you')
-        // const requestfrom = players.find(player => player.id === reqFromID)
-        // alert(requestfrom.name + ' challenged you')
+    useEffect(() => {
+        socket.current.off('accept');
+        socket.current.on('accept', reqUserID => {
+            const reqFromUser = players.find(player => player.id === reqUserID);
+            console.log(reqUserID, reqFromUser)
+        });
+
+    }, [players]);
+
+    const onChallenge = (user) => {
+        socket.current.emit('challenge', user.id)
     }
 
     const renderChallenge = (user) => {
@@ -59,7 +76,7 @@ export default function Players() {
                 </div>
                 <div className="player-card-body">
                     {
-                        players.map(player => <Player onRequest={_onRequest} socket={socket} key={player.id} player={player} />)
+                        players.map(player => <Player onChallenge={onChallenge} socket={socket} key={player.id} player={player} />)
                     }
                 </div>
             </div>

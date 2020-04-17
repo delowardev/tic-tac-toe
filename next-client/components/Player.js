@@ -8,20 +8,16 @@ function randomColor() {
     return COLOR[rand];
 }
 
-export default function Player({player, socket, onRequest}) {
+export default function Player({ player, onChallenge}) {
+
     const [color, setColor] = useState('#9C27B0');
+
     useEffect(() => {
         setColor(randomColor())
-
-        socket.current.on('accept', socketId => {
-            onRequest(socketId);
-        })
-
     }, [])
 
     const _handleClick = () => {
-        if ( player.isCurrentUser ) return;
-        socket.current.emit('challenge', player.id)
+        onChallenge(player)
     }
 
 

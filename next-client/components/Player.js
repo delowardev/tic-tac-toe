@@ -8,11 +8,23 @@ function randomColor() {
     return COLOR[rand];
 }
 
-export default function Player({player}) {
+export default function Player({player, socket, onRequest}) {
     const [color, setColor] = useState('#9C27B0');
     useEffect(() => {
         setColor(randomColor())
+
+        socket.current.on('accept', socketId => {
+            console.log('accept pls:', socketId);
+            onRequest(socketId);
+        })
+
     }, [])
+
+    const _handleClick = () => {
+        if ( player.isCurrentUser ) return;
+        socket.current.emit('challenge', player.id)
+    }
+
 
     return (
         <div className={`player-list current-user-${player.isCurrentUser}`}>
@@ -24,7 +36,7 @@ export default function Player({player}) {
                     <h4>{player.name}</h4>
                     <span>Joined: {format(player.joined_at)}</span>
                 </div>
-                <button disabled={player.isCurrentUser} className='button'>{player.isCurrentUser ? 'It\'s you!' : 'Challange'}</button>
+                <button onClick={_handleClick} disabled={player.isCurrentUser} className='button'>{player.isCurrentUser ? 'It\'s you!' : 'Challenge'}</button>
             </div>
         </div>
     )

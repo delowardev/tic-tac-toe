@@ -130,7 +130,10 @@ body{
 				 background: palegreen;
 			 }
 		 }
-	 }
+	}
+	&.current-user-true .player-info .button{
+		background: palegreen;
+	}
  }
 
  /**

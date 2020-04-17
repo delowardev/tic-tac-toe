@@ -8,23 +8,15 @@ let socket;
 export default function Players() {
 
     const [players, setPlayers] = useState([]);
-
-    const ENDPOINT = 'localhost:5000';
-    socket = io(ENDPOINT);
+    const getName = () => faker.name.firstName() + ' ' + faker.name.lastName();
 
     useEffect(() => {
-        const name = faker.name.firstName() + ' ' + faker.name.lastName();
-        socket.emit('join', {name, room: 'global'});
 
-        return () => {
-            socket.emit('disconnect');
-            socket.off();
-        }
+        const ENDPOINT = 'localhost:5000';
+        socket = io.connect(ENDPOINT);
 
-    }, [])
+        socket.emit('join', {name: getName(), room: 'global'});
 
-    useEffect(() => {
-        
         socket.on('user_joined', (users) => {
             setPlayers(users);
         });
@@ -33,9 +25,12 @@ export default function Players() {
             setPlayers(users);
         }); 
 
-    }, [players]);
+        return () => {
+            socket.emit('disconnect');
+            socket.off();
+        }
 
-
+    }, [])
     return (
         <div className='online-players-card'>
             <div className="player-card-header">

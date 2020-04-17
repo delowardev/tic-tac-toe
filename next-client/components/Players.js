@@ -6,7 +6,7 @@ import faker from 'faker';
 export default function Players() {
 
     const [players, setPlayers] = useState([]);
-    const [popup, setPopup] = useState(false);
+    const [challengedBy, setChallengedBy] = useState(null);
     const socket = useRef(io('localhost:5000'));
 
     const getName = () => faker.name.firstName() + ' ' + faker.name.lastName();
@@ -53,7 +53,7 @@ export default function Players() {
         socket.current.off('accept');
         socket.current.on('accept', reqUserID => {
             const reqFromUser = players.find(player => player.id === reqUserID);
-            console.log(reqUserID, reqFromUser)
+            reqFromUser && setChallengedBy(reqFromUser);
         });
 
     }, [players]);
@@ -63,18 +63,22 @@ export default function Players() {
         socket.current.emit('challenge', user.id)
     }
 
-    const renderChallenge = (user) => {
-        if(!user) return;
+    const RenderChallenge = () => {
+        if(!challengedBy) return null;
         return (
-            <div className="challenge-popup">
-                <h4>{user.name} invited you</h4>
-                <div className="chalenge-popup-btns">
-                    <button>Accept</button>
-                    <button>Reject</button>
+            <div className="challenged-by-popup">
+                <div className="challenged-by-popup-inner">
+                    <h4>{challengedBy.name} challenged you</h4>
+                    <div className="challenged-btns">
+                        <button className="button">Reject</button>
+                        <button className="button">Accept</button>
+                    </div>
                 </div>
             </div>
         )
     }
+
+    
 
     return (
         <div className="online-player-card-wrap">
@@ -89,6 +93,7 @@ export default function Players() {
                     }
                 </div>
             </div>
+            <RenderChallenge />
         </div>
     )
 }

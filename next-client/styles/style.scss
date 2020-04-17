@@ -263,3 +263,37 @@ body{
 			}
 	   }
    }
+
+   /**
+	* Challenge Popup
+	*/
+
+	.challenged-by-popup {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, .6);
+		top: 0;
+		left: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.challenged-by-popup-inner {
+			background: orange;
+			width: 300px;
+			color: black;
+			padding: 25px 25px 20px;
+			border-radius: 10px;
+			h4 {
+				margin: 0 0 15px;
+				font-size: 20px;
+			}
+			.button {
+				border: none;
+				line-height: 30px;
+				padding: 0 18px;
+				margin-right: 7px;
+				border-radius: 4px;
+			}
+		}
+	}

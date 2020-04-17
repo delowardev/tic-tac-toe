@@ -19,14 +19,14 @@ io.on('connection', function (socket) {
     let user_room = '';
 
     /**
-     * User Join Function
+     * User Joins to the global room
      */
     socket.on('join', function ({ name, room }) {
         addUser({id, name, room}); // add user to users array
         user_room = room;
         socket.join(user_room);
         socket.emit('user_joined', { users, id, type : 'current_user'});
-        socket.broadcast.to(user_room).emit('user_joined', { users, id, type: 'new_user'}); // emit event with modified users array
+        socket.broadcast.emit('user_joined', { users, id, type: 'new_user'}); // emit event with modified users array
     })
 
     /**
@@ -36,7 +36,7 @@ io.on('connection', function (socket) {
         socket.leave(socket);
         removeUser(id); // remove user form users array
         socket.emit('user_left', {users, id, type: 'current_user'});
-        socket.broadcast.to(user_room).emit('user_left', {users, id, type: 'new_user'});  // emit event with modified users
+        socket.broadcast.emit('user_left', {users, id, type: 'new_user'});  // emit event with modified users
     })
 
 

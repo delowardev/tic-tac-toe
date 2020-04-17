@@ -14,7 +14,6 @@ export default function Player({player, socket, onRequest}) {
         setColor(randomColor())
 
         socket.current.on('accept', socketId => {
-            console.log('accept pls:', socketId);
             onRequest(socketId);
         })
 

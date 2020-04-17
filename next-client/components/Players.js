@@ -32,7 +32,9 @@ export default function Players() {
     }, []);
 
     const _onRequest = (reqFromID) => {
-
+        alert(reqFromID + 'challenged you')
+        // const requestfrom = players.find(player => player.id === reqFromID)
+        // alert(requestfrom.name + ' challenged you')
     }
 
     const renderChallenge = (user) => {

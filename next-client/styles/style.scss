@@ -279,13 +279,14 @@ body{
 		align-items: center;
 		justify-content: center;
 		.challenged-by-popup-inner {
-			background: orange;
+			background: #ffd652;
 			width: 300px;
 			color: black;
 			padding: 25px 25px 20px;
 			border-radius: 10px;
+			margin-bottom: 120px;
 			h4 {
-				margin: 0 0 15px;
+				margin: 0 0 20px;
 				font-size: 20px;
 			}
 			.button {
@@ -294,6 +295,11 @@ body{
 				padding: 0 18px;
 				margin-right: 7px;
 				border-radius: 4px;
+				background: rgb(255, 87, 34);
+				border: 1px solid rgba(#000, .3);
+				&.accept-btn{
+					background: rgb(76, 175, 80);
+				}
 			}
 		}
 	}

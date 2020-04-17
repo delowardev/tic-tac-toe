@@ -68,17 +68,19 @@ export default function Players() {
         return (
             <div className="challenged-by-popup">
                 <div className="challenged-by-popup-inner">
-                    <h4>{challengedBy.name} challenged you</h4>
+                    <h4>{challengedBy.name} challenged you!</h4>
                     <div className="challenged-btns">
-                        <button className="button">Reject</button>
-                        <button className="button">Accept</button>
+                        <button className="button accept-btn">Play Now</button>
+                        <button onClick={onClickReject} className="button reject-btn">Not Now</button>
                     </div>
                 </div>
             </div>
         )
     }
 
-    
+    const onClickReject = () => {
+        setChallengedBy(null);
+    }
 
     return (
         <div className="online-player-card-wrap">

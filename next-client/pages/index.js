@@ -1,10 +1,12 @@
 import Layout from '../components/Layout';
-import Welcome from '../components/Welcome';
+import Players from '../components/Players';
+import GameBoard from '../components/GameBoard';
 
 export default function Home() {
   return (
     <Layout>
-        <Welcome />
+        <Players />
+        <GameBoard />
     </Layout>
   )
 }

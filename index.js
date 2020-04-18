@@ -44,6 +44,10 @@ io.on('connection', function (socket) {
         io.to(socketId).emit('accept', id);
     })
 
+    socket.on('rejected', (socketId) => {
+        io.to(socketId).emit('rejected', id);
+    });
+
     /**
      * User Disconnect function
      */

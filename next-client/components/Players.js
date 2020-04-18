@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import Player from './Player';
 import io from 'socket.io-client';
 import faker from 'faker';
+import { nanoid } from 'nanoid';
 
 export default function Players() {
 
@@ -52,11 +53,15 @@ export default function Players() {
     useEffect(() => {
         socket.current.off('accept');
         socket.current.on('accept', reqUserID => {
-            const reqFromUser = players.find(player => player.id === reqUserID);
+            const reqFromUser = getPlayerByID(reqUserID);
             reqFromUser && setChallengedBy(reqFromUser);
         });
 
     }, [players]);
+
+    // Get Player by ID
+
+    const getPlayerByID = id => players.find(player => player.id === id);
 
 
     const onChallenge = (user) => {
@@ -68,9 +73,9 @@ export default function Players() {
         return (
             <div className="challenged-by-popup">
                 <div className="challenged-by-popup-inner">
-                    <h4>{challengedBy.name} challenged you!</h4>
+                    <h4>{challengedBy.name}: Can You Beat Me???</h4>
                     <div className="challenged-btns">
-                        <button className="button accept-btn">Play Now</button>
+                        <button onClick={onClickPlay} className="button accept-btn">Play Now</button>
                         <button onClick={onClickReject} className="button reject-btn">Not Now</button>
                     </div>
                 </div>
@@ -78,7 +83,13 @@ export default function Players() {
         )
     }
 
+    const onClickPlay = () => {
+        const player = getPlayerByID(socket.current.id);
+        socket.current.emit('accepted', { player, opponent: challengedBy, matchID: nanoid()});
+    }
+
     const onClickReject = () => {
+        socket.current.emit('rejected', challengedBy.id);
         setChallengedBy(null);
     }
 

@@ -8,7 +8,7 @@ function randomColor() {
     return COLOR[rand];
 }
 
-export default function Player({ player, onChallenge}) {
+export default function Player({ player, onChallenge, socket}) {
 
     const [color, setColor] = useState('#9C27B0');
     const [button, setButton] = useState('Challenge');
@@ -20,30 +20,42 @@ export default function Player({ player, onChallenge}) {
             setButton('It\'s you!');
         }
 
+        if (player.playing) {
+            setButton('In a match!');
+        }
+
+        socket.current.off('rejected');
+        socket.current.on('rejected', (id) => {
+            if(player.id === id){
+                setButton('Rejected');
+                setTimeout(() => {
+                    setButton('Challenge');
+                }, 4000)
+            }
+        })
+
+
     }, [])
 
     const _handleClick = () => {
-        if( player.isCurrentUser ) return;
-
+        if( player.isCurrentUser || player.playing ) return;
         onChallenge(player)
         setButton('Waiting...');
-        setTimeout(() => setButton('Challenge'), 3000)
-        
     }
 
 
-    return (
-        <div className={`player-list current-user-${player.isCurrentUser}`}>
+    return typeof player.name !== 'undefined' ? (
+        <div className={`player-list current-user-${player.isCurrentUser} is-playing-${player.playing}`}>
             <div className="player-thumbnail">
-                <span style={{ background: color}}>{player.name.substring(0, 2)}</span>
+                <span style={{ background: color}}>{(player.name).substring(0, 2)}</span>
             </div>
             <div className="player-info">
                 <div className="player-info-left">
                     <h4>{player.name}</h4>
                     <span>Joined: {format(player.joined_at)}</span>
                 </div>
-                <button onClick={_handleClick} disabled={player.isCurrentUser} className='button'>{button}</button>
+                <button onClick={_handleClick} disabled={player.isCurrentUser || player.playing} className='button'>{button}</button>
             </div>
         </div>
-    )
+    ) : null
 }

@@ -3,7 +3,7 @@ const users = [];
 /**
  * Create User
  */
-const addUser = ({id, name, room, match}) => {
+const addUser = ({id, name, room, match, playing = false}) => {
     const existing = users.find(user => user.name === name && user.room === room);
     if(existing){
         return {error: 'Username is taken'}
@@ -14,6 +14,7 @@ const addUser = ({id, name, room, match}) => {
         name,
         room,
         match,
+        playing,
         joined_at: Date.now()
     };
 

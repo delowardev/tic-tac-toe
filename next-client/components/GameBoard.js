@@ -1,19 +1,21 @@
-export default function GameBoard() {
+export default function GameBoard({ boxes = [1, 0, 0, 0, 2, 0, 0, 1, 2], socket}) {
+
+    const x = '/static/xx.png';
+    const o = '/static/oo.png';
+
+    const Image = ({type}) => type === 1 ? <img src={x} /> : (type === 2 ? <img src={o} /> : null);
+
     return (
         <div className='game-board-ui-wrap'>
             <div className="game-board-ui">
                 <h4>Tic Tac Toe Online</h4>
                 <div className="game-board">
                     <ul>
-                        <li>1</li>
-                        <li>2</li>
-                        <li>3</li>
-                        <li>4</li>
-                        <li>5</li>
-                        <li>6</li>
-                        <li>7</li>
-                        <li>8</li>
-                        <li>9</li>
+                        {
+                            boxes.map((box, key) => (
+                                <li className={`box-type-${box}`} key={key}><Image type={box}/></li>
+                            ))
+                        }
                     </ul>
                 </div>
             </div>

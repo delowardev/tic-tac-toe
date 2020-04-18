@@ -3,6 +3,7 @@ const http = require('http');
 const router = require('./router');
 // const cors = require('cors');
 const { addUser, removeUser, getUser, getUsersInRoom, users } = require('./users');
+const { match, addPlayer, destroyMatch, getPlayersByMatch } = require('./players');
 
 const PORT = process.env.PORT || 5000;
 
@@ -14,7 +15,7 @@ const server = http.createServer(app);
 const socketio = require('socket.io');
 const io = socketio(server, {
     pingTimeout: 5000,
-    wsEngine: 'ws'
+    // wsEngine: 'ws'
 });
 
 io.origins('*:*');
@@ -26,8 +27,8 @@ io.on('connection', function (socket) {
     /**
      * User Joins to the global room
      */
-    socket.on('join', function ({ name, room, match = null }) {
-        addUser({ id, name, room, match }); // add user to users array
+    socket.on('join', function ({ name, room, playing = false }) {
+        addUser({ id, name, room, playing }); // add user to users array
         user_room = room;
         socket.join(user_room);
         socket.join(id);
@@ -35,6 +36,17 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('user_joined', users); // emit event with modified users array
     })
 
+    /**
+     * Match Started
+     */
+
+    socket.on('player_joined', user => {
+        addPlayer(user.match, user);
+        socket.emit('player_joined', match[user.match]);
+        socket.broadcast.to(user.match).emit('player_joined', match[user.match]);
+    });
+
+    
     /**
      * On user challenge
      */
@@ -47,6 +59,11 @@ io.on('connection', function (socket) {
     socket.on('rejected', (socketId) => {
         io.to(socketId).emit('rejected', id);
     });
+
+    socket.on('accepted', data => {
+        io.to(data.opponent.id).emit('accepted', data);
+        socket.emit('accepted', data);
+    })
 
     /**
      * User Disconnect function

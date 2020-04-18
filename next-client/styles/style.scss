@@ -145,6 +145,7 @@ $sidebar: 350px;
 			 }
 		 }
 	}
+	&.is-playing-true .player-info .button,
 	&.current-user-true .player-info .button{
 		background: palegreen;
 	}
@@ -189,8 +190,18 @@ $sidebar: 350px;
 					align-items: center;
 					justify-content: center;
 					box-shadow: 0 0 0 1px rgba(#ffffff, .1);
+					img{
+						max-height: 50%;
+						width: auto;
+					}
 					&:nth-child(2n + 1){
 						background: #4e19a7;
+					}
+					&.box-type-2{
+						background: #FF9800;
+					}
+					&.box-type-1{
+						background: #03A9F4;
 					}
 				}
 			  }

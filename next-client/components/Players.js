@@ -3,14 +3,13 @@ import Player from './Player';
 import io from 'socket.io-client';
 import faker from 'faker';
 import { nanoid } from 'nanoid';
+import Router from 'next/router'
 
 export default function Players() {
 
     const [players, setPlayers] = useState([]);
     const [challengedBy, setChallengedBy] = useState(null);
-    const socket = useRef(io('ws://localhost:5000'));
-
-    const getName = () => faker.name.firstName() + ' ' + faker.name.lastName();
+    const socket = useRef(io('http://127.0.0.1:5000'));
 
     /**
      * Run once after mounted
@@ -20,7 +19,7 @@ export default function Players() {
         /**
          * Emit events
          */
-        socket.current.emit('join', {name: getName(), room: 'global'});
+        socket.current.emit('join', { name: faker.name.firstName(), room: 'global'});
 
         /**
          * Watch events
@@ -43,6 +42,7 @@ export default function Players() {
         return () => {
             socket.current.emit('disconnect');
             socket.current.off();
+            socket.current.disconnect();
         }
 
     }, []);
@@ -51,10 +51,23 @@ export default function Players() {
      * Run on every new player added or removed
      */
     useEffect(() => {
+
         socket.current.off('accept');
         socket.current.on('accept', reqUserID => {
             const reqFromUser = getPlayerByID(reqUserID);
             reqFromUser && setChallengedBy(reqFromUser);
+        });
+
+        socket.current.off('accepted');
+        socket.current.on('accepted', data => {
+            const name = getPlayerByID(socket.current.id).name
+            Router.push({
+                pathname: '/play',
+                query: {
+                    match: data.matchID,
+                    name
+                }
+            }, '/play');
         });
 
     }, [players]);

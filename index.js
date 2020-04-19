@@ -34,7 +34,7 @@ io.on('connection', function (socket) {
         socket.join(id);
         socket.emit('user_joined', users);
         socket.broadcast.emit('user_joined', users); // emit event with modified users array
-    })
+    });
 
     /**
      * Match Started
@@ -42,11 +42,23 @@ io.on('connection', function (socket) {
 
     socket.on('player_joined', user => {
         addPlayer(user.match, user);
-        socket.emit('player_joined', match[user.match]);
-        socket.broadcast.to(user.match).emit('player_joined', match[user.match]);
+        if(match.hasOwnProperty(user.match) && match[user.match].length === 2){
+            socket.emit('player_joined', match[user.match]);
+            socket.broadcast.to(user.match).emit('player_joined', match[user.match]);
+        }
     });
 
-    
+    socket.on('move', (data) => {
+        socket.emit('move', data);
+        socket.broadcast.to(data.match).emit('move', data);
+    });
+
+    socket.on('emote', (data) => {
+        socket.emit('emote_from', data);
+        socket.broadcast.to(data.match).emit('emote_to', data);
+    });
+
+
     /**
      * On user challenge
      */
@@ -54,7 +66,7 @@ io.on('connection', function (socket) {
 
     socket.on('challenge', (socketId) => {
         io.to(socketId).emit('accept', id);
-    })
+    });
 
     socket.on('rejected', (socketId) => {
         io.to(socketId).emit('rejected', id);
@@ -63,7 +75,7 @@ io.on('connection', function (socket) {
     socket.on('accepted', data => {
         io.to(data.opponent.id).emit('accepted', data);
         socket.emit('accepted', data);
-    })
+    });
 
     /**
      * User Disconnect function

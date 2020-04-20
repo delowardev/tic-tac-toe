@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import CurrentPlayer from "./CurrentPlayer";
+import Link from 'next/link';
 
 /**
  * @return {null}
@@ -15,6 +16,20 @@ export default function GameBoard({socket, match}) {
     const [myMove, setMyMove] = useState([]);
     const [opponentMove, setOpponentMove] = useState([]);
     const [activePlayer, setActivePlayer] = useState(null);
+    const [winner, setWinner] = useState(null);
+
+    const WINNING_COMBO = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+
+        [1, 4, 7],
+        [2, 5, 8],
+        [3, 6, 9],
+
+        [1, 5, 9],
+        [3, 5, 7]
+    ];
 
 
     const x = '/static/xx.png';
@@ -36,6 +51,10 @@ export default function GameBoard({socket, match}) {
 
     useEffect(() => {
         socket.current.on('connect', () => {
+
+            /**
+             * Watch joined event and update state
+             */
             socket.current.off('player_joinded');
             socket.current.on('player_joined', (match) => {
                 const cid = socket.current.id;
@@ -44,12 +63,10 @@ export default function GameBoard({socket, match}) {
                 setOpponent(match.find(p => p.socketId !== cid));
                 setActivePlayer(match[0].socketId);
             });
-        });
 
-    }, [players, me, opponent]);
-
-    useEffect(() => {
-        socket.current.on('connect', () => {
+            /**
+             * Watch move event an update sate
+             */
             socket.current.on('move', ({index, userID, opponentId}) => {
                 setActivePlayer(opponentId);
                 if(socket.current.id === userID) {
@@ -58,11 +75,8 @@ export default function GameBoard({socket, match}) {
                     setOpponentMove(prev => [...prev, index]);
                 }
             });
+
         });
-
-    }, [myMove, opponentMove, activePlayer]);
-
-    useEffect(() => {
 
         /**
          * Run before unmount
@@ -72,8 +86,35 @@ export default function GameBoard({socket, match}) {
             socket.current.off();
             socket.current.disconnect();
         }
+
     }, []);
 
+    const hasSubArray = (master, sub) => {
+        return sub.every((i => v => i = master.indexOf(v, i) + 1)(0));
+    };
+
+
+    useEffect(() => {
+        const myMoveSorted = myMove.sort();
+        const opponentMoveSorted = opponentMove.sort();
+
+        if(myMoveSorted.length > 2){
+            WINNING_COMBO.forEach(combo => {
+                if(hasSubArray(myMoveSorted, combo)) {
+                    setWinner(me.socketId);
+                }
+            });
+        }
+
+        if(opponentMoveSorted.length > 2){
+            WINNING_COMBO.forEach(combo => {
+                if(hasSubArray(opponentMoveSorted, combo)) {
+                    setWinner(opponent.socketId);
+                }
+            });
+        }
+
+    }, [myMove, opponentMove]);
 
     const onClickEmote = emote => {
         socket.current.emit('emote', {emote, from: me.socketId, to: opponent.socketId, match});
@@ -83,7 +124,19 @@ export default function GameBoard({socket, match}) {
         <div className='game-board-ui-wrap'>
 
             {
-                me && <CurrentPlayer socket={socket} activePlayer={activePlayer} player={me} move={myMove}/>
+                winner && <div className="winner">
+                    <div className="winner-inner">
+                        <img src={`/emoji/${winner === me.socketId ? 'party' : 'sad'}.svg`}/>
+                        <h3>{winner === me.socketId ? 'You' : 'Opponent'} won the match!</h3>
+                        <div className="btn-group">
+                            <Link href='/'><a className="button">Go Back</a></Link>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            {
+                me && <CurrentPlayer isMe={true} socket={socket} activePlayer={activePlayer} player={me} move={myMove}/>
             }
 
             <div className="game-board-ui">
@@ -93,15 +146,15 @@ export default function GameBoard({socket, match}) {
                         {
                             Array(9).fill(0).map((box, key) => {
 
-                                const inMyMove = myMove.indexOf(key);
-                                const inOpponentMove = opponentMove.indexOf(key);
+                                const inMyMove = myMove.indexOf(key + 1);
+                                const inOpponentMove = opponentMove.indexOf(key + 1);
                                 const image = inMyMove > -1 ? 2 : (inOpponentMove > -1 ? 1 : 0);
-                                const isDisabled = inMyMove > -1 || inOpponentMove > -1 || (!activePlayer || activePlayer !== me.socketId);
+                                const isDisabled = inMyMove > -1 || inOpponentMove > -1 || (!activePlayer || activePlayer !== (me.socketId || ''));
 
                                 return (
                                     <li
                                         className={`box-type-${image}`}
-                                        onClick={() => handleClick(key, isDisabled)} key={key}
+                                        onClick={() => handleClick(key + 1, isDisabled)} key={key}
                                     >
                                         <Image type={image}/>
                                     </li>
@@ -120,7 +173,7 @@ export default function GameBoard({socket, match}) {
             </div>
 
             {
-                opponent && <CurrentPlayer socket={socket} activePlayer={activePlayer} player={opponent} move={opponentMove}/>
+                opponent && <CurrentPlayer isMe={false} socket={socket} activePlayer={activePlayer} player={opponent} move={opponentMove}/>
             }
         </div>
     ) : null

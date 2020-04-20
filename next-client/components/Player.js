@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import TimeAgo from 'react-timeago';
 import { format } from 'timeago.js';
 
 function randomColor() {

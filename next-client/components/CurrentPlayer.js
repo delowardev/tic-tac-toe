@@ -1,29 +1,31 @@
 import {useEffect, useState} from "react";
 
-const CurrentPlayer = ({player, move, activePlayer, socket}) => {
+const CurrentPlayer = ({player, move, activePlayer, socket, isMe}) => {
 
     const [emote, setEmote] = useState('');
+    const [emoteClass, setEmoteClass] = useState('');
 
     useEffect(() => {
 
-        // socket.current.off('emote_from');
         socket.current.on('emote_from', data => {
             setEmote(data.from === player.socketId ? data.emote : '');
-            // console.log(data);
+            setEmoteClass('active');
+            setTimeout(() => setEmoteClass(''), 1000)
         });
 
-        // socket.current.off('emote_to');
         socket.current.on('emote_to', data => {
             setEmote(data.from === player.socketId ? data.emote : '');
-            // console.log(data);
+            setEmoteClass('active');
+            setTimeout(() => setEmoteClass(''), 1000)
         });
 
     },[]);
 
+
     return (
         <div className={`current-player ${activePlayer === player.socketId ? 'active-player' : ''}`}>
             <span className="player-avatar">{(player.name || '').substring(0, 2)}</span>
-            <h4 className="player-name">{player.name}</h4>
+            <h4 className="player-name">{player.name} {isMe && '(You)'}</h4>
             <div className="player-move-count-wrap">
                 <div className="player-move-count player-move-count-empty">
                     {
@@ -44,7 +46,7 @@ const CurrentPlayer = ({player, move, activePlayer, socket}) => {
                 <span>49%</span>
                 Winning Chance
             </div>
-            { emote && <div className="message-box"><img src={`/emoji/${emote}.svg`}/></div>}
+            { emote && <div className={`message-box ${emoteClass}`}><img src={`/emoji/${emote}.svg`}/></div>}
         </div>
     );
 };

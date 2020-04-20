@@ -40,7 +40,6 @@ export default function play() {
 
     return (
         <Layout>
-            {/*<CurrentPlayers socket={socket}/>*/}
             <GameBoard match={match} socket={socket}/>
         </Layout>
     )

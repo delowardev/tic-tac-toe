@@ -86,8 +86,10 @@ export default function Players() {
         return (
             <div className="challenged-by-popup">
                 <div className="challenged-by-popup-inner">
-                    <h4>{challengedBy.name}: Can You Beat Me???</h4>
-                    <div className="challenged-btns">
+                    <img src={`/emoji/smile.svg`}/>
+                    <h3>Can You Beat Me???</h3>
+                    <p>{challengedBy.name} challenged you.</p>
+                    <div className="challenged-btns btn-group">
                         <button onClick={onClickPlay} className="button accept-btn">Play Now</button>
                         <button onClick={onClickReject} className="button reject-btn">Not Now</button>
                     </div>

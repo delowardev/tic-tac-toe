@@ -3,60 +3,60 @@
 
 [Live React Client: https://tic-tac-toe-react.now.sh/](https://tic-tac-toe-react.now.sh/)
 
-# vue-client
+### Vue JS Client (`vue-client`)
 
 ## Project setup
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+#### Compiles and hot-reloads for development
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
+#### Compiles and minifies for production
 ```
 yarn build
 ```
 
-### Lints and fixes files
+#### Lints and fixes files
 ```
 yarn lint
 ```
 
 
-# next-client (React JS)
+### React JS Client (`next-client`)
 
-## Project setup
+#### Project setup
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+#### Compiles and hot-reloads for development
 ```
 yarn dev
 ```
 
-### Compiles and minifies for production
+#### Compiles and minifies for production
 ```
 yarn build
 ```
 
-# server
+### Node Socket.io Server (`server`)
 
-## Project setup
+#### Project setup
 ```
 npm install
 ```
 
-## Development
+#### Development
 
 ```
 npm run dev
 ```
 
-## Production
+#### Production
 
 ```
 npm run start

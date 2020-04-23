@@ -37,7 +37,8 @@
                 this.socket.emit('join', {
                     name: this.name,
                     room: this.match,
-                    playing: true
+                    playing: true,
+                    joined_at: Date.now()
                 });
 
                 this.socket.emit('player_joined', {

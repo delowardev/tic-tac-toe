@@ -3,7 +3,7 @@ const users = [];
 /**
  * Create User
  */
-const addUser = ({id, name, room, match, playing = false}) => {
+const addUser = ({id, name, room, match, playing = false, joined_at = null}) => {
     const existing = users.find(user => user.name === name && user.room === room);
     if(existing){
         return {error: 'Username is taken'}
@@ -15,7 +15,7 @@ const addUser = ({id, name, room, match, playing = false}) => {
         room,
         match,
         playing,
-        joined_at: Date.now()
+        joined_at: joined_at || Date.now()
     };
 
     users.unshift(user);

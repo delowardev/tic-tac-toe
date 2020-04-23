@@ -20,7 +20,11 @@ export default function play() {
         }
 
         socket.current.on('connect', () => {
-            socket.current.emit('join', { name, room: match, playing: true });
+            socket.current.emit('join', {
+                name,
+                room: match,
+                playing: true
+            });
             socket.current.emit('player_joined', {
                 name,
                 match,

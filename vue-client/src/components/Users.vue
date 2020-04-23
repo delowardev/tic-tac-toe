@@ -65,7 +65,11 @@
             /**
              * Join user to the global room
              */
-            this.socket.emit('join', { name: faker.name.firstName(), room: 'global'});
+            this.socket.emit('join', {
+                name: faker.name.firstName(),
+                room: 'global',
+                joined_at: Date.now()
+            });
 
             /**
              * Watching socket events

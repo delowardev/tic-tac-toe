@@ -27,8 +27,8 @@ io.on('connection', function (socket) {
     /**
      * User Joins to the global room
      */
-    socket.on('join', function ({ name, room, playing = false }) {
-        addUser({ id, name, room, playing }); // add user to users array
+    socket.on('join', function ({ name, room, playing = false, joined_at }) {
+        addUser({ id, name, room, playing, joined_at }); // add user to users array
         user_room = room;
         socket.join(user_room);
         socket.join(id);

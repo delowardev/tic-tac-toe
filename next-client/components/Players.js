@@ -20,7 +20,11 @@ export default function Players() {
         /**
          * Emit events
          */
-        socket.current.emit('join', { name: faker.name.firstName(), room: 'global'});
+        socket.current.emit('join', {
+            name: faker.name.firstName(),
+            room: 'global',
+            joined_at: Date.now()
+        });
 
         /**
          * Watch events

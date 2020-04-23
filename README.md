@@ -5,8 +5,9 @@
 
 ## Screenshots
 
-<img src="https://i.imgur.com/de1qxXm.png" width="300" /><img src="https://i.imgur.com/Tmz5OyD.png" width="300" />
-<img src="https://i.imgur.com/JtEJyu4.png" width="300" />
+<img src="https://i.imgur.com/de1qxXm.png" width="500" />
+<img src="https://i.imgur.com/Tmz5OyD.png" width="500" />
+<img src="https://i.imgur.com/JtEJyu4.png" width="500" />
 
 ### Vue JS Client (`vue-client`)
 

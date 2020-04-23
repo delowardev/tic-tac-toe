@@ -19,8 +19,6 @@ const addUser = ({id, name, room, match, playing = false}) => {
     };
 
     users.unshift(user);
-    return { user };
-
 }
 
 /**
@@ -32,19 +30,13 @@ const removeUser = id => {
      if(index !== -1){
         return users.splice(index, 1)[0]
      }
- }
+}
 
- /**
-  * Getting user
-  */
+/**
+ * Get All users
+ */
 
-const getUser = id => users.find(user => user.id === id);
+const getUsers = () => users;
 
-  /**
-   * Get user in room
-   */
-
-const getUsersInRoom = room => users.filter(user => user.room === room);
-
-
-module.exports = {addUser, removeUser, getUser, getUsersInRoom, users}
+// export modules
+module.exports = {addUser, removeUser, getUsers};

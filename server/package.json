@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "start-vue": "cd vue-client && npm run serve"
   },
   "author": "",
   "license": "ISC",

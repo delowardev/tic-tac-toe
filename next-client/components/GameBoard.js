@@ -17,6 +17,8 @@ export default function GameBoard({socket, match}) {
     const [opponentMove, setOpponentMove] = useState([]);
     const [activePlayer, setActivePlayer] = useState(null);
     const [winner, setWinner] = useState(null);
+    const [playerLeft, setPlayerLeft] = useState(false);
+
 
     const WINNING_COMBO = [
         [1, 2, 3],
@@ -93,8 +95,18 @@ export default function GameBoard({socket, match}) {
         return sub.every((i => v => i = master.indexOf(v, i) + 1)(0));
     };
 
+    useEffect(() => {
+        socket.current.on('player_left_match', () => {
+            setPlayerLeft(true);
+            socket.current.emit('destroy_match', match)
+        });
+    }, [match, playerLeft]);
+
 
     useEffect(() => {
+        /**
+         * Decide winner
+         */
         const myMoveSorted = myMove.sort();
         const opponentMoveSorted = opponentMove.sort();
 
@@ -124,8 +136,8 @@ export default function GameBoard({socket, match}) {
         <div className='game-board-ui-wrap'>
 
             {
-                winner && <div className="winner">
-                    <div className="winner-inner">
+                winner && <div className="common-popup">
+                    <div className="popup-inner">
                         <img src={`/emoji/${winner === me.socketId ? 'party' : 'sad'}.svg`}/>
                         <h3>{winner === me.socketId ? 'You' : 'Opponent'} won the match!</h3>
                         <div className="btn-group">
@@ -136,11 +148,24 @@ export default function GameBoard({socket, match}) {
             }
 
             {
-                me && <CurrentPlayer isMe={true} socket={socket} activePlayer={activePlayer} player={me} move={myMove}/>
+                playerLeft && (
+                    <div className="common-popup">
+                        <div className="popup-inner">
+                            <img src={'/emoji/sad.svg'}/>
+                            <h3>{opponent.name} left the match!</h3>
+                            <div className="btn-group">
+                                <Link href='/'><a className="button">Go Back</a></Link>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {
+                me && <CurrentPlayer isMe={true} socket={socket} activePlayer={activePlayer} player={me} move={myMove} opponentMove={opponentMove}/>
             }
 
             <div className="game-board-ui">
-                { me && <h4>{activePlayer === me.socketId ? 'Your Turn' : 'Opponent\'s Turn'}</h4> }
                 <div className="game-board">
                     <ul>
                         {
@@ -149,7 +174,7 @@ export default function GameBoard({socket, match}) {
                                 const inMyMove = myMove.indexOf(key + 1);
                                 const inOpponentMove = opponentMove.indexOf(key + 1);
                                 const image = inMyMove > -1 ? 2 : (inOpponentMove > -1 ? 1 : 0);
-                                const isDisabled = inMyMove > -1 || inOpponentMove > -1 || (!activePlayer || activePlayer !== (me.socketId || ''));
+                                const isDisabled = inMyMove > -1 || inOpponentMove > -1 || !me || (activePlayer !== me.socketId);
 
                                 return (
                                     <li
@@ -173,7 +198,7 @@ export default function GameBoard({socket, match}) {
             </div>
 
             {
-                opponent && <CurrentPlayer isMe={false} socket={socket} activePlayer={activePlayer} player={opponent} move={opponentMove}/>
+                opponent && <CurrentPlayer isMe={false} socket={socket} activePlayer={activePlayer} player={opponent} move={opponentMove} opponentMove={myMove}/>
             }
         </div>
     ) : null

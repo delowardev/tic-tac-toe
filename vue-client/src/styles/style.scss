@@ -184,9 +184,11 @@ $sidebar: 400px;
 					&:nth-child(2n + 1){
 						background: #4e19a7;
 					}
+					&.box-type-xx,
 					&.box-type-2{
 						background: #FF9800;
 					}
+					&.box-type-oo,
 					&.box-type-1{
 						background: #03A9F4;
 					}
@@ -345,7 +347,6 @@ span.current-turn {
 }
 
 
-.challenged-by-popup,
 .common-popup{
 	backdrop-filter: blur(5px);
 	position: fixed;
@@ -355,10 +356,9 @@ span.current-turn {
 	align-items: center;
 	justify-content: center;
 	background: rgba(#000, .6);
-	z-index: 9;
+	z-index: 9999;
 	top: 0;
 	left: 0;
-	.challenged-by-popup-inner,
 	.popup-inner{
 		background: white;
 		color: #000000;
@@ -381,6 +381,7 @@ span.current-turn {
 		.btn-group{
 			margin-top: 25px;
 		}
+		a,
 		.button{
 			font-size: 15px;
 			background: orangered;
@@ -390,6 +391,7 @@ span.current-turn {
 			border-radius: 4px;
 			color: white;
 			margin: 0 5px;
+			text-decoration: none;
 			&.accept-btn{
 				background: #42b983;
 			}

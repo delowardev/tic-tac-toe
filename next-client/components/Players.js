@@ -3,13 +3,14 @@ import Player from './Player';
 import io from 'socket.io-client';
 import faker from 'faker';
 import { nanoid } from 'nanoid';
-import Router from 'next/router'
+import Router from 'next/router';
+import SOCKET_SERVER_ORIGIN from '../server';
 
 export default function Players() {
 
     const [players, setPlayers] = useState([]);
     const [challengedBy, setChallengedBy] = useState(null);
-    const socket = useRef(io('http://127.0.0.1:5000'));
+    const socket = useRef(io(SOCKET_SERVER_ORIGIN));
 
     /**
      * Run once after mounted
@@ -75,7 +76,6 @@ export default function Players() {
     // Get Player by ID
 
     const getPlayerByID = id => players.find(player => player.id === id);
-
 
     const onChallenge = (user) => {
         socket.current.emit('challenge', user.id)

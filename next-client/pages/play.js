@@ -1,14 +1,16 @@
 import { useEffect, useRef } from 'react';
+import { useBeforeunload } from 'react-beforeunload';
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import GameBoard from '../components/GameBoard';
 import io from 'socket.io-client';
-import Router from 'next/router'
+import Router from 'next/router';
+import SOCKET_SERVER_ORIGIN from '../server';
 
 
 export default function play() {
     const router = useRouter();
-    const socket = useRef(io('http://127.0.0.1:5000'));
+    const socket = useRef(io(SOCKET_SERVER_ORIGIN));
     const {name, match} = router.query;
 
     useEffect(() => {
@@ -30,12 +32,20 @@ export default function play() {
          * Run before unmount
          */
         return () => {
+            socket.current.emit('player_left_match', match);
             socket.current.emit('disconnect');
             socket.current.off();
             socket.current.disconnect();
         }
 
     }, []);
+
+
+
+    useBeforeunload(() => {
+        socket.current.emit('player_left_match', match);
+        return true;
+    });
 
 
     return (

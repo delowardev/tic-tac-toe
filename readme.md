@@ -1,6 +1,8 @@
 # Tic Tac Toe Multiplayer Game
 [Live Vue Client: https://tic-tac-toe-vue.now.sh](https://tic-tac-toe-vue.now.sh)
 
+[Live React Client: https://tic-tac-toe-react.now.sh/](https://tic-tac-toe-react.now.sh/)
+
 # vue-client
 
 ## Project setup

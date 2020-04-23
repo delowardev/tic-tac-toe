@@ -5,7 +5,7 @@
 
 ### Vue JS Client (`vue-client`)
 
-## Project setup
+#### Project setup
 ```
 yarn install
 ```

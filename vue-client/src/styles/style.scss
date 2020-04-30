@@ -49,8 +49,6 @@ $sidebar: 400px;
 	border-radius: 5px;
 	overflow: hidden;
 	box-shadow: 0 0 30px rgba(#000, .2);
-	height: 80vh;
-	max-height: 600px;
 	width: #{$sidebar};
 	.player-card-header{
 		display: flex;

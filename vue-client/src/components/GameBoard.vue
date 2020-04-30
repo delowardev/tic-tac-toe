@@ -20,11 +20,21 @@
             </div>
         </div>
 
+		<div v-if="gameOver" class="player-left common-popup">
+            <div class="popup-inner">
+                <img src="../assets/emoji/sad.svg"/>
+                <h3>Game Over!</h3>
+                <div class="btn-group">
+                    <router-link to="/">&#x21D6; Back to Lobby</router-link>
+                </div>
+            </div>
+        </div>
+
         <Player v-bind:player="me" v-bind:socket="socket" v-bind:moves="myMoves" v-bind:opponentMoves="opponentMoves" v-bind:activePlayer="activePlayer" v-bind:isMe="true"/>
         <div class="game-board-ui">
             <div class="game-board">
                 <ul>
-                    <li v-bind:class="'box-type-' + getBoxImage(index + 1)" v-for="(box, index) in Array(9).fill(0)" v-on:click="onClickBox(index + 1)" v-bind:key="index">
+                    <li v-bind:class="'box-type-' + (getBoxImage(index + 1) === 'xx' ? '1' : (getBoxImage(index + 1) === 'oo' ? 2 : 0))" v-for="(box, index) in Array(9).fill(0)" v-on:click="onClickBox(index + 1)" v-bind:key="index">
                         <img v-if="getBoxImage(index + 1)" v-bind:src="require(`../assets/${getBoxImage(index + 1)}.png`)" alt="">
                     </li>
                 </ul>
@@ -70,7 +80,8 @@
                 myWinningChance: 50,
                 opponentWinningChance: 50,
                 emotes: ['like', 'smile', 'grinning', 'heart', 'tired', 'sad', 'angry', 'party'],
-                playerLeft: false
+				playerLeft: false,
+				gameOver: false
             }
         },
         methods: {
@@ -127,7 +138,12 @@
                         }
                     });
                 }
-            }
+			},
+			checkGameOver() {
+				if(this.myMoves.length + this.opponentMoves.length === 9) {
+					this.gameOver = true;
+				}
+			}
         },
         created() {
             this.socket.on('connect', () => {
@@ -153,7 +169,8 @@
                     }else{
                         this.opponentMoves = [...this.opponentMoves, index];
                     }
-                    this.decideWinner();
+					this.decideWinner();
+					this.checkGameOver();
                 });
 
                 /**
@@ -161,7 +178,9 @@
                  */
 
                 this.socket.on('player_left_match', () => {
-                    this.playerLeft = true;
+                    if(!this.winner) {
+						this.playerLeft = true;
+					}
                     this.socket.emit('destroy_match', this.match)
                 })
 

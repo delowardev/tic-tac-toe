@@ -49,7 +49,9 @@ $sidebar: 400px;
 	border-radius: 5px;
 	overflow: hidden;
 	box-shadow: 0 0 30px rgba(#000, .2);
-	width: #{$sidebar};
+	max-width: #{$sidebar};
+	width: 90%;
+	max-height: 600px;
 	.player-card-header{
 		display: flex;
 		align-items: center;
@@ -140,12 +142,14 @@ $sidebar: 400px;
  * Game Board UI
  */
 
+
 .game-board-ui-wrap{
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	height: 100vh;
 	width: 100%;
+	flex-wrap: wrap;
 	.game-board-ui{
 		> h4 {
 			text-align: center;
@@ -155,10 +159,8 @@ $sidebar: 400px;
 		.game-board{
 			ul{
 				display: grid;
-				grid-template-columns: 33% 33% 33%;
-				grid-template-rows: 33% 33% 33%;
+				grid-template-columns: 33.33% 33.33% 33.33%;
 				width: 400px;
-				height: 400px;
 				margin: 0 50px;
 				padding: 0;
 				list-style: none;
@@ -167,26 +169,33 @@ $sidebar: 400px;
 				overflow: hidden;
 				grid-column-gap: 1px;
 				grid-row-gap: 1px;
-				//border: 3px solid rgba(#000, .3);
+				max-width: 55vw;
 				box-shadow: 0 0 0 4px rgba(#fff, .3), 0 0 0 10px rgba(#fff, .2);
+				@media screen and (max-width: 860px) {
+					max-width: 300px;
+				}
 				li{
 					font-size: 60px;
 					display: inline-flex;
 					align-items: center;
 					justify-content: center;
 					box-shadow: 0 0 0 1px rgba(#ffffff, .1);
+					padding-bottom: 100%;
+					position: relative;
 					img{
 						max-height: 50%;
 						width: auto;
+						position: absolute;
+						top: 50%;
+						left: 50%;
+						transform: translate(-50%, -50%);
 					}
 					&:nth-child(2n + 1){
 						background: #4e19a7;
 					}
-					&.box-type-xx,
 					&.box-type-2{
 						background: #FF9800;
 					}
-					&.box-type-oo,
 					&.box-type-1{
 						background: #03A9F4;
 					}
@@ -210,6 +219,9 @@ $sidebar: 400px;
 	box-shadow: 0 0 25px rgba(0, 0, 0, .4);
 	margin-bottom: 55px;
 	border: 2px solid rgba(#fff, .3);
+	@media screen and (max-width: 860px) {
+		width: 110px;
+	}
 	&.active-player{
 		border: 2px solid #FF9800;
 	}
@@ -230,6 +242,9 @@ $sidebar: 400px;
 	.player-name{
 		margin: 15px 0 0;
 		font-size: 18px;
+		@media screen and (max-width: 860px) {
+			font-size: 15px;
+		}
 	}
 }
 
@@ -266,6 +281,9 @@ $sidebar: 400px;
 	position: relative;
 	display: inline-flex;
 	margin-top: 6px;
+	@media screen and (max-width: 860px) {
+		font-size: 12px;
+	}
 	.player-move-count{
 		opacity: .4;
 		letter-spacing: 5px;
@@ -289,8 +307,11 @@ $sidebar: 400px;
 	span {
 		display: block;
 		font-size: 23px;
-		margin-bottom: 5px;
+		margin-bottom: 7px;
 		color: #FF9800;
+		@media screen and (max-width: 860px) {
+			font-size: 18px;
+		}
 	}
 }
 

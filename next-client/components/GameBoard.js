@@ -18,6 +18,7 @@ export default function GameBoard({socket, match}) {
     const [activePlayer, setActivePlayer] = useState(null);
     const [winner, setWinner] = useState(null);
     const [playerLeft, setPlayerLeft] = useState(false);
+    const [gameOver, setGameOver] = useState(false);
 
 
     const WINNING_COMBO = [
@@ -126,6 +127,11 @@ export default function GameBoard({socket, match}) {
             });
         }
 
+        if(opponentMove.length + myMove.length === 9){
+            setGameOver(true);
+            socket.current.emit('destroy_match', match)
+        }
+
     }, [myMove, opponentMove]);
 
     const onClickEmote = emote => {
@@ -153,6 +159,20 @@ export default function GameBoard({socket, match}) {
                         <div className="popup-inner">
                             <img src={'/emoji/sad.svg'}/>
                             <h3>{opponent.name} left the match!</h3>
+                            <div className="btn-group">
+                                <Link href='/'><a className="button">Go Back</a></Link>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {
+                gameOver && (
+                    <div className="common-popup">
+                        <div className="popup-inner">
+                            <img src={'/emoji/sad.svg'} />
+                            <h3>Game Over!</h3>
                             <div className="btn-group">
                                 <Link href='/'><a className="button">Go Back</a></Link>
                             </div>

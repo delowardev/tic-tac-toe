@@ -150,7 +150,11 @@ $sidebar: 400px;
 	height: 100vh;
 	width: 100%;
 	flex-wrap: wrap;
+	@media screen and (max-width: 660px) {
+		padding-top: 45px;
+	}
 	.game-board-ui{
+		margin: 30px 0 60px;
 		> h4 {
 			text-align: center;
 			font-size: 25px;
@@ -218,6 +222,7 @@ $sidebar: 400px;
 	width: 130px;
 	box-shadow: 0 0 25px rgba(0, 0, 0, .4);
 	margin-bottom: 55px;
+	margin-top: 30px;
 	border: 2px solid rgba(#fff, .3);
 	@media screen and (max-width: 860px) {
 		width: 110px;
